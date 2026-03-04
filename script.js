@@ -1,6 +1,6 @@
 /**
- * LUMI 5.7 - ANTI-TROLL & NEURAL
- * Correção definitiva de detecção de 'Por que' e validação de nome.
+ * LUMI 5.8 POCKET - STANDALONE EDITION
+ * Blindagem total contra loops e integração direta com cerebro.js
  */
 
 const LUMI_ENGINE = {
@@ -78,7 +78,7 @@ const LUMI_ENGINE = {
         u.rate = this.state.config.voiceRate;
         u.onend = () => {
             this.ui.toggleControls(false);
-            if (socket?.readyState === 1) this.ui.updateStatus('idle', 'Em sintonia');
+            this.ui.updateStatus('idle', 'Sintonizada');
         };
         window.speechSynthesis.speak(u);
     },
@@ -86,71 +86,54 @@ const LUMI_ENGINE = {
     validarNome(nome) {
         const blacklist = ["lixo", "burro", "idiota", "teste", "nada", "lumi", "megaboga", "admin"];
         const limpo = nome.trim().toLowerCase();
-        // Regex para validar se parece um nome (sem números, sem caracteres especiais, max 2 palavras)
         const apenasLetras = /^[a-zA-ZÀ-ÿ\s]+$/.test(limpo);
-        const palavras = limpo.split(/\s+/);
-        
-        if (limpo.length < 2 || limpo.length > 20 || !apenasLetras || blacklist.includes(limpo) || palavras.length > 3) {
-            return false;
-        }
-        return true;
+        return (limpo.length >= 2 && limpo.length <= 15 && !blacklist.includes(limpo) && apenasLetras);
     },
 
     analyze(msg) {
-        // Limpeza agressiva para análise
         const raw = msg.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[?.!,;]/g, "").trim();
         const agora = Date.now();
-        const offline = !socket || socket.readyState !== 1;
 
-        if (!raw) { this.ui.updateStatus('idle', 'Em sintonia'); return true; }
+        if (!raw) { this.ui.updateStatus('idle', 'Sintonizada'); return true; }
 
-        // 1. BLOQUEIO DE ONBOARDING
+        // 1. BATISMO
         if (!this.state.userName) {
             if (this.validarNome(msg)) {
                 const nomeFinal = msg.trim().split(' ')[0].charAt(0).toUpperCase() + msg.trim().split(' ')[0].slice(1).toLowerCase();
                 this.state.userName = nomeFinal;
                 localStorage.setItem('lumi_user_name', nomeFinal);
-                this.render(`Prazer em te conhecer, ${nomeFinal}! Estou pronta para ajudar você com a aula de hoje.`);
+                this.render(`Prazer em te conhecer, ${nomeFinal}! Estou pronta para ajudar você com os estudos.`);
             } else {
-                this.render("Como sou uma inteligência para a escola, preciso saber seu primeiro nome primeiro. Como se chama?");
+                this.render("Preciso saber seu primeiro nome antes de começarmos. Como se chama?");
             }
             return true;
         }
 
-        // 2. DETECÇÃO DE "POR QUE" (Neural-style Regex)
-        // Pega: "por que", "porque", "pq", "por que?" em qualquer lugar da frase
+        // 2. POR QUÊ EMOCIONAL
         const regexPorQue = /\bpq\b|\bporque\b|\bpor\s+que\b/i;
-        const perguntouPorQue = regexPorQue.test(raw);
-        const estaNoContextoAcolhimento = (this.state.lastContext.type === "acolhimento" && (agora - this.state.lastContext.time < 90000));
-
-        if (perguntouPorQue && estaNoContextoAcolhimento) {
-            this.render(`Como eu disse, ${this.state.userName}, eu sou apenas um programa feito para ensinar. Nesses momentos de tristeza, o seu professor é quem tem o coração para te acolher de verdade.`, true);
+        if (regexPorQue.test(raw) && (this.state.lastContext.type === "acolhimento" && (agora - this.state.lastContext.time < 90000))) {
+            this.render(`Como eu disse, ${this.state.userName}, sou apenas um programa. Nesses momentos, seu professor é quem pode te acolher de verdade.`, true);
             return true;
         }
 
         // 3. GATILHOS DE DOR
-        if (["triste", "medo", "morreu", "mal", "ruim", "perdi", "sozinho", "chorar"].some(p => raw.includes(p))) {
+        if (["triste", "medo", "morreu", "mal", "ruim", "perdi", "sozinho"].some(p => raw.includes(p))) {
             this.state.lastContext = { type: 'acolhimento', time: agora };
             this.ui.updateStatus('acolhimento', 'Acolhendo');
-            this.render(`Sinto muito por isso. Saiba que seu professor está aqui na sala e você pode contar com ele agora.`, true);
+            this.render(`Sinto muito por isso. Saiba que seu professor está aqui na sala para te ouvir e te ajudar.`, true);
             return true;
         }
 
         // 4. SOCIAL
         if (["oi", "ola", "tudo bem", "bom dia", "boa tarde"].some(s => raw.includes(s))) {
-            if (offline) {
-                this.ui.updateStatus('off', 'Luz fraca');
-                this.render("Minha luz está fraca sem conexão. Avise o professor!");
+            this.state.socialCount++;
+            if (this.state.socialCount > 2) {
+                this.state.socialCount = 0;
+                this.ui.updateStatus('drible', 'Foco');
+                this.render(`É bom conversar com você, ${this.state.userName}, mas vamos focar no desafio da aula?`, true);
             } else {
-                this.state.socialCount++;
-                if (this.state.socialCount > 2) {
-                    this.state.socialCount = 0;
-                    this.ui.updateStatus('drible', 'Foco');
-                    this.render(`É muito bom conversar com você, ${this.state.userName}, mas vamos focar no desafio da aula?`, true);
-                } else {
-                    const frases = [`Olá, ${this.state.userName}!`, "Oi! Vamos aprender?", "Estou sintonizada!", "Em que posso ajudar?"];
-                    this.render(frases[Math.floor(Math.random() * frases.length)], true);
-                }
+                const frases = [`Olá, ${this.state.userName}!`, "Oi! Vamos aprender?", "Estou sintonizada!", "Como posso ajudar agora?"];
+                this.render(frases[Math.floor(Math.random() * frases.length)], true);
             }
             return true;
         }
@@ -159,44 +142,36 @@ const LUMI_ENGINE = {
     }
 };
 
-// --- COMUNICAÇÃO ---
-let socket, bufferMensagens = [];
-function conectar() {
-    socket = new WebSocket('ws://localhost:8000/ws');
-    socket.onopen = () => LUMI_ENGINE.ui.updateStatus('idle', 'Em sintonia');
-    socket.onmessage = (e) => {
-        const data = JSON.parse(e.data);
-        LUMI_ENGINE.state.history.push(data.corpo_da_dica);
-        if (LUMI_ENGINE.state.history.length > 10) LUMI_ENGINE.state.history.shift();
-        
-        // Se recebeu resposta do servidor, o foco voltou a ser acadêmico
-        LUMI_ENGINE.state.lastContext.type = 'idle';
-        LUMI_ENGINE.render(data.corpo_da_dica, false);
-    };
-    socket.onclose = () => {
-        LUMI_ENGINE.ui.updateStatus('off', 'Desconectado');
-        setTimeout(conectar, 3000);
-    };
-}
-
+// --- FLUXO DE ENVIO (PLUGADO NO CEREBRO.JS) ---
+let bufferMensagens = [];
 function enviarMensagem() {
     const texto = LUMI_ENGINE.ui.input.value.trim();
-    if (!texto) { LUMI_ENGINE.ui.updateStatus('idle', 'Em sintonia'); return; }
+    if (!texto) { LUMI_ENGINE.ui.updateStatus('idle', 'Sintonizada'); return; }
     
     clearTimeout(LUMI_ENGINE.timers.envio);
     bufferMensagens.push(texto);
     LUMI_ENGINE.ui.input.value = '';
-    LUMI_ENGINE.ui.updateStatus('captando', 'Escutando...');
+    LUMI_ENGINE.ui.updateStatus('captando', 'Processando...');
 
     LUMI_ENGINE.timers.envio = setTimeout(() => {
         const msg = bufferMensagens.join(" ");
         bufferMensagens = [];
+        
         if (!LUMI_ENGINE.analyze(msg)) {
-            if (socket?.readyState === 1) {
-                socket.send(JSON.stringify({ texto: msg, historico: LUMI_ENGINE.state.history }));
+            LUMI_ENGINE.ui.updateStatus('proc', 'Irradiando...'); // Branco pulsante
+
+            // Chamada segura para o LUMI_BRAIN (Cerebro.js)
+            if (typeof LUMI_BRAIN !== 'undefined') {
+                LUMI_BRAIN.enviar(msg, LUMI_ENGINE.state.history, (data) => {
+                    LUMI_ENGINE.state.history.push(data.corpo_da_dica);
+                    if (LUMI_ENGINE.state.history.length > 10) LUMI_ENGINE.state.history.shift();
+                    LUMI_ENGINE.state.lastContext.type = 'idle';
+                    LUMI_ENGINE.render(data.corpo_da_dica, false);
+                });
             } else {
-                LUMI_ENGINE.ui.updateStatus('drible', 'Sem sinal');
-                LUMI_ENGINE.render("Minha luz caiu... Chame o professor.", true);
+                console.error("Cérebro não encontrado! Verifique se cerebro.js está carregado.");
+                LUMI_ENGINE.ui.updateStatus('off', 'Erro Interno');
+                LUMI_ENGINE.render("Minha luz falhou... Não encontrei meu cérebro local.");
             }
         }
     }, 2000);
@@ -214,49 +189,75 @@ function ajustarVelocidade(deltaRate, deltaTyping) {
     const ultimaDica = document.querySelector('.dica-lumi:last-child .txt')?.textContent;
     if (ultimaDica) LUMI_ENGINE.speak(ultimaDica);
 }
-
 document.getElementById('slow-btn').onclick = () => ajustarVelocidade(-0.2, 15);
 document.getElementById('fast-btn').onclick = () => ajustarVelocidade(0.2, -10);
 
-// --- MOTOR DE VOZ (STT) ---
-if ('webkitSpeechRecognition' in window) {
-    const recognition = new webkitSpeechRecognition();
+// --- MOTOR DE VOZ (STT) - MODO WALKIE-TALKIE POCKET ---
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechConstructor = window.webkitSpeechRecognition || window.SpeechRecognition;
+    const recognition = new SpeechConstructor();
+    
     recognition.lang = 'pt-BR';
     recognition.continuous = false;
-    
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+        console.log("✅ Escutando...");
+        LUMI_ENGINE.ui.updateStatus('captando', 'Escutando...');
+    };
+
     recognition.onresult = (e) => { 
         const result = e.results[0][0].transcript;
-        if (result) { LUMI_ENGINE.ui.input.value = result; enviarMensagem(); }
+        console.log("🎤 Lumi ouviu:", result);
+        if (result) { 
+            LUMI_ENGINE.ui.input.value = result; 
+            // Dispara o envio automático
+            enviarMensagem(); 
+        }
     };
 
     recognition.onend = () => {
         LUMI_ENGINE.state.isRecording = false;
         LUMI_ENGINE.ui.sttBtn.classList.remove('btn-active');
-        if (LUMI_ENGINE.ui.status.innerText === "Irradiando...") LUMI_ENGINE.ui.updateStatus('idle', 'Em sintonia');
+        if (!LUMI_ENGINE.ui.input.value) {
+            LUMI_ENGINE.ui.updateStatus('idle', 'Sintonizada');
+        }
     };
 
-    recognition.onerror = () => { recognition.stop(); LUMI_ENGINE.ui.updateStatus('idle', 'Em sintonia'); };
-
+    // --- LÓGICA DE SEGURAR (PRESS & HOLD) ---
     LUMI_ENGINE.ui.sttBtn.onmousedown = () => {
-        if (LUMI_ENGINE.state.isRecording) try { recognition.stop(); } catch(e) {}
+        LUMI_ENGINE.ui.input.value = "";
         window.speechSynthesis.cancel();
-        LUMI_ENGINE.state.isRecording = true;
-        LUMI_ENGINE.ui.sttBtn.classList.add('btn-active');
-        LUMI_ENGINE.ui.updateStatus('captando', 'Irradiando...');
-        try { recognition.start(); } catch(e) {}
+        
+        try {
+            recognition.start();
+            LUMI_ENGINE.state.isRecording = true;
+            LUMI_ENGINE.ui.sttBtn.classList.add('btn-active');
+        } catch(err) {
+            recognition.stop();
+        }
+
+        // Kill-switch de segurança (8 segundos de fala máxima)
         clearTimeout(LUMI_ENGINE.timers.stt);
         LUMI_ENGINE.timers.stt = setTimeout(() => {
-            if (LUMI_ENGINE.state.isRecording) { recognition.stop(); LUMI_ENGINE.ui.updateStatus('idle', 'Sintonizada'); }
-        }, 6000);
+            if (LUMI_ENGINE.state.isRecording) recognition.stop();
+        }, 8000);
     };
 
-    LUMI_ENGINE.ui.sttBtn.onmouseup = () => { 
-        setTimeout(() => { if (LUMI_ENGINE.state.isRecording) recognition.stop(); }, 500);
+    LUMI_ENGINE.ui.sttBtn.onmouseup = () => {
+        // O SEGREDO: Não damos o stop imediato. 
+        // Damos 800ms para o Chrome terminar de processar a última palavra.
+        setTimeout(() => {
+            if (LUMI_ENGINE.state.isRecording) {
+                recognition.stop();
+                console.log("Finalizando captura...");
+            }
+        }, 800);
     };
 }
 
-// --- INICIALIZAÇÃO ---
-conectar();
+// INICIALIZAÇÃO
+LUMI_ENGINE.ui.updateStatus('idle', 'Sintonizada');
 setTimeout(() => {
     if (!LUMI_ENGINE.state.userName) {
         LUMI_ENGINE.render("Olá! Sou a Lumi, sua luz para os estudos. Antes de começarmos, como você se chama?");
