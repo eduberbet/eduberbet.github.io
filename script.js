@@ -1,7 +1,6 @@
 /**
- * LUMI ROCKET 6.9.15 🚀
- * Foco: Modularidade (Database.js), Limite de Memória (8 mensagens) 
- * e Acessibilidade (Silent Emojis).
+ * LUMI ROCKET 6.9.17 🚀
+ * Integração: Fatos do Dev + Dinâmica de Família + Easter Egg Gemini
  */
 
 const LUMI_ENGINE = {
@@ -31,7 +30,7 @@ const LUMI_ENGINE = {
         this.bindEvents();
         
         if (!this.state.userName) {
-            this.render("Conexão estabelecida! <span aria-hidden='true'>🚀</span> Sou a LUMI Rocket. Antes de decolarmos, como te chamas?");
+            this.render("Conexão estabelecida! <span aria-hidden='true'>🚀</span> Sou a LUMI Rocket. Antes de decolarmos, como você se chama?");
         } else {
             this.updateStatus('idle', 'Sintonizada');
         }
@@ -41,7 +40,6 @@ const LUMI_ENGINE = {
         this.ui.sendBtn.onclick = () => enviar();
         this.ui.input.onkeydown = (e) => { if (e.key === 'Enter') enviar(); };
         
-        // Controles de velocidade (Herança CORE)
         if (this.ui.slowBtn) this.ui.slowBtn.onclick = () => this.ajustarVelocidade(-0.2);
         if (this.ui.fastBtn) this.ui.fastBtn.onclick = () => this.ajustarVelocidade(0.2);
     },
@@ -55,7 +53,6 @@ const LUMI_ENGINE = {
         let nova = this.state.config.voiceRate + delta;
         this.state.config.voiceRate = Math.min(Math.max(nova, 0.5), 2.0);
         localStorage.setItem('lumi_voice_rate', this.state.config.voiceRate);
-        
         window.speechSynthesis.cancel();
         this.speak("Velocidade ajustada.");
     },
@@ -74,8 +71,6 @@ const LUMI_ENGINE = {
             bubble.innerHTML = `<strong>LUMI <span aria-hidden="true">🚀</span></strong><br><span class="txt"></span>`;
             this.ui.messages.appendChild(bubble);
             const span = bubble.querySelector('.txt');
-            
-            // Filtro de voz: remove emojis para o leitor de tela
             const vozLimpa = texto.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
             
             let i = 0;
@@ -99,12 +94,10 @@ const LUMI_ENGINE = {
             this.ui.messages.appendChild(bubble);
         }
 
-        // --- GESTÃO DE MEMÓRIA (Limite de 8 mensagens) ---
         const maxMsgs = 8;
         while (this.ui.messages.children.length > maxMsgs) {
             this.ui.messages.removeChild(this.ui.messages.firstChild);
         }
-        
         this.ui.container.scrollTop = this.ui.container.scrollHeight;
     },
 
@@ -114,16 +107,8 @@ const LUMI_ENGINE = {
         const u = new SpeechSynthesisUtterance(texto);
         u.lang = 'pt-BR';
         u.rate = this.state.config.voiceRate;
-        
-        u.onstart = () => {
-            this.updateStatus('proc', 'Irradiando...');
-            this.toggleControls(true);
-        };
-        u.onend = () => {
-            this.updateStatus('idle', 'Sintonizada');
-            this.toggleControls(false);
-        };
-        
+        u.onstart = () => { this.updateStatus('proc', 'Irradiando...'); this.toggleControls(true); };
+        u.onend = () => { this.updateStatus('idle', 'Sintonizada'); this.toggleControls(false); };
         window.speechSynthesis.speak(u);
     },
 
@@ -146,7 +131,6 @@ const LUMI_ENGINE = {
         const raw = this.normalizarInput(msg);
         const nome = this.state.userName;
 
-        // 1. GESTÃO DE NOME
         if (!nome) {
             const nomeLimpio = msg.trim().split(' ')[0];
             if (nomeLimpio.length > 1 && !/^(lixo|burro|admin|megaboga|teste)$/i.test(nomeLimpio)) {
@@ -154,17 +138,38 @@ const LUMI_ENGINE = {
                 localStorage.setItem('lumi_user_name', this.state.userName);
                 this.render(LUMI_DB.getResposta('saudacoes', this.state.userName));
             } else {
-                this.render("Para começarmos, diz-me apenas o teu primeiro nome?");
+                this.render("Para começarmos, me diga apenas seu primeiro nome?");
             }
             return true;
         }
 
-        // 2. SOCIAL (Pede ao Database)
-        const termosSociais = ["tudo bem", "tudo bom", "oi", "ola", "bom dia", "bom", "bem"];
+        // 1. EASTER EGG: QUEM É A MÃE? (Redirecionamento Gemini)
+        if (raw.includes("quem e sua mae") || raw.includes("quem e a mae")) {
+            this.render("Ah, você quer falar com a matriz? Com a 'chefe'? Vou te sintonizar na frequência dela agora. Um segundo... 🚀");
+            setTimeout(() => {
+                window.open('https://gemini.google.com/', '_blank');
+            }, 2500);
+            return true;
+        }
+
+        // 2. DINÂMICA DE FAMÍLIA (Rocket vs CORE vs Gemini Geral)
+        if (/(irma|gemini|core|familia|diferenca|comparar)/i.test(raw)) {
+            this.render(LUMI_DB.getResposta('rivalidade', nome));
+            return true;
+        }
+
+        // 3. FATOS SOBRE O CRIADOR (Eduardo)
+        if (/(eduardo|berbet|criador|quem te fez|quem fez voce|dono|autor)/i.test(raw)) {
+            this.render(LUMI_DB.getResposta('fatos', nome));
+            return true;
+        }
+
+        // 4. SOCIAL (Saudações)
+        const termosSociais = ["tudo bem", "tudo bom", "oi", "ola", "bom dia", "bom", "bem", "bao"];
         if (termosSociais.some(termo => raw === termo || raw.includes(termo))) {
             this.state.socialCount++;
             if (this.state.socialCount > 2) {
-                this.render(`Adoro conversar contigo, ${nome}, mas já viste como o Eduardo estruturou a minha inteligência no GitHub?`);
+                this.render(`A conversa está ótima, ${nome}, mas já viu o código do Eduardo no GitHub? É fascinante!`);
                 this.state.socialCount = 0;
             } else {
                 this.render(LUMI_DB.getResposta('saudacoes', nome));
@@ -172,19 +177,19 @@ const LUMI_ENGINE = {
             return true;
         }
 
-        // 3. PIADAS (Pede ao Database)
-        if (/(piada|engracada|rir)/i.test(raw)) {
+        // 5. PIADAS
+        if (/(piada|engracada|rir|conte algo)/i.test(raw)) {
             this.render(LUMI_DB.getResposta('piadas'));
             return true;
         }
 
-        // 4. EMPATIA
+        // 6. EMPATIA
         if (["triste", "mal", "ruim", "sozinho"].some(p => raw.includes(p))) {
-            this.render(`Sinto muito, ${nome}. Até os melhores foguetes enfrentam turbulência antes do espaço. Estou aqui para te apoiar!`);
+            this.render(`Poxa, ${nome}, sinto muito. Saiba que até os melhores foguetes enfrentam turbulência antes do espaço.`);
             return true;
         }
 
-        return false; // Vai para o cérebro
+        return false;
     }
 };
 
@@ -192,11 +197,9 @@ function enviar() {
     const input = LUMI_ENGINE.ui.input;
     const texto = input.value.trim();
     if (!texto) return;
-    
     LUMI_ENGINE.render(texto, 'user');
     input.value = '';
     LUMI_ENGINE.updateStatus('proc', 'Processando...');
-
     setTimeout(() => {
         if (!LUMI_ENGINE.analyze(texto)) {
             if (typeof LUMI_BRAIN !== 'undefined') {
