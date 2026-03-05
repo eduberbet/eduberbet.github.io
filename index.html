@@ -3,34 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUMI - Pinky Gold 5.2</title>
+    <title>LUMI Rocket 🚀</title>
+    <link rel="icon" href="https://fav.farm/🚀" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app">
         <header id="lumi-header">
-            <div id="lumi-focus" class="lumi-off"></div>
-            <p id="lumi-status">Sintonizando...</p>
+            <div id="lumi-focus" class="lumi-idle"></div>
+            <p id="lumi-status">Sintonizada</p>
         </header>
         
         <main id="chat-container">
-            <div id="messages"></div>
+            <div id="messages-wrapper"></div>
         </main>
 
         <footer class="input-area">
-            <input type="text" id="user-input" placeholder="Pergunte à Lumi..." autocomplete="off">
-            
-            <div class="botoes-acao" id="group-normal">
-                <button id="stt-btn" title="Segure para falar">🎙️</button>
-                <button id="send-btn" title="Enviar texto">🚀</button>
-            </div>
-
-            <div class="botoes-acao" id="group-speed" style="display: none;">
-                <button id="slow-btn" title="Mais lento">🐢</button>
-                <button id="fast-btn" title="Mais rápido">⚡</button>
-            </div>
+            <button id="stt-btn" title="Segure para falar">🎙️</button>
+            <input type="text" id="user-input" placeholder="Diz 'quem és tu' ou pede uma piada..." autocomplete="off">
+            <button id="send-btn" title="Enviar texto">🚀</button>
         </footer>
     </div>
+
     <script src="cerebro.js"></script>
     <script src="script.js"></script>
 </body>

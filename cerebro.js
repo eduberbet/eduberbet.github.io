@@ -1,34 +1,39 @@
 /**
- * LUMI POCKET - CÉREBRO LOCAL (SIMULADOR)
- * Substitui o servidor Python para funcionamento 100% Offline/GitHub Pages.
+ * LUMI BRAIN - ROCKET EDITION 🧠🚀
  */
 
 const LUMI_BRAIN = {
-    // Banco de respostas pedagógicas para a versão de demonstração
-    database: [
-        "Essa é uma ótima pergunta! Como você acha que isso se aplica no seu dia a dia?",
-        "Interessante... Tente pensar por outro ângulo: o que aconteceria se mudássemos um detalhe?",
-        "Sua curiosidade é o motor do aprendizado. O que mais você sabe sobre esse assunto?",
-        "Estou sintonizando... Lembre-se que errar faz parte da descoberta científica!",
-        "Que dúvida incrível! O professor vai adorar aprofundar isso com você na aula.",
-        "A ciência é feita de perguntas. Como você explicaria isso para um colega?",
-        "Estou processando... Tente relacionar isso com o que vimos na última aula!"
-    ],
+    dadosOrigem: "https://raw.githubusercontent.com/eduberbet/Lumi/main/ReadMe.md",
+    documentacao: "",
+    
+    // Inicializa a conexão com o repositório do Eduardo
+    async inicializar() {
+        try {
+            const resp = await fetch(this.dadosOrigem);
+            if (resp.ok) {
+                this.documentacao = await resp.text();
+                console.log("🚀 Rocket Brain: Conectada ao repositório Core!");
+            }
+        } catch (e) {
+            console.warn("🚀 Rocket Brain: Operando em modo offline.");
+        }
+    },
 
-    // Simula o envio que antes era via Socket.io / WebSocket
+    // Função de processamento principal
     enviar(mensagem, historico, callback) {
-        console.log("Pocket Brain: Processando logicamente...");
+        console.log("Rocket Brain: Processando...");
         
-        // Simula a latência de processamento do LLM (2.5 segundos)
+        // Simula o tempo de "pensamento"
         setTimeout(() => {
-            const respostaAleatoria = this.database[Math.floor(Math.random() * this.database.length)];
+            let resposta = "Minha antena oscilou! 🚀 Não achei isso na documentação oficial. Que tal me perguntar sobre o Roadmap ou pedir uma piada?";
             
-            // Retorna o objeto exatamente como o backend Python faria
-            const data = {
-                corpo_da_dica: respostaAleatoria
-            };
+            // Se o usuário perguntar algo que não foi pego pelo Regex do script.js
+            // O cérebro responde aqui.
             
-            callback(data);
-        }, 2500);
+            callback({ corpo_da_dica: resposta });
+        }, 1000);
     }
 };
+
+// Dispara a carga da documentação
+LUMI_BRAIN.inicializar();
