@@ -3,15 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUMI Rocket 🚀</title>
-    <link rel="icon" href="https://fav.farm/🚀" />
+    <title>LUMI Rocket - Canaveral Edition</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos rápidos para os novos controles de velocidade */
+        .botoes-acao {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        #group-speed {
+            background: rgba(0, 206, 209, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--lumi-turquesa);
+        }
+        .speed-label {
+            font-size: 0.7rem;
+            color: var(--lumi-turquesa);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
         <header id="lumi-header">
-            <div id="lumi-focus" class="lumi-idle"></div>
-            <p id="lumi-status">Sintonizada</p>
+            <div id="lumi-focus" class="lumi-off"></div>
+            <p id="lumi-status">Sintonizando...</p>
         </header>
         
         <main id="chat-container">
@@ -19,13 +39,31 @@
         </main>
 
         <footer class="input-area">
-            <button id="stt-btn" title="Segure para falar">🎙️</button>
-            <input type="text" id="user-input" placeholder="Diz 'quem és tu' ou pede uma piada..." autocomplete="off">
-            <button id="send-btn" title="Enviar texto">🚀</button>
+            <input type="text" id="user-input" placeholder="Diz 'quem és tu'..." autocomplete="off">
+            
+            <div class="botoes-acao" id="group-normal">
+                <button id="stt-btn" title="Segure para falar">
+                    <span aria-hidden="true">🎙️</span>
+                </button>
+                <button id="send-btn" title="Enviar texto">
+                    <span aria-hidden="true">🚀</span>
+                </button>
+            </div>
+
+            <div class="botoes-acao" id="group-speed" style="display: none;">
+                <button id="slow-btn" title="Mais lento">
+                    <span aria-hidden="true">🐢</span>
+                </button>
+                <span class="speed-label">Voz</span>
+                <button id="fast-btn" title="Mais rápido">
+                    <span aria-hidden="true">⚡</span>
+                </button>
+            </div>
         </footer>
     </div>
 
+    <script src="database.js"></script>
     <script src="cerebro.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js"></script> 
 </body>
 </html>

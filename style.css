@@ -8,99 +8,27 @@
 
 body {
     background: radial-gradient(circle at top, #1a2a3a 0%, var(--lumi-bg) 100%);
-    color: white; 
-    height: 100vh; 
-    overflow: hidden; /* Trava a página para não rolar o fundo */
+    color: white; height: 100vh; overflow: hidden;
 }
 
-#app { 
-    display: flex; 
-    flex-direction: column; 
-    height: 100vh; 
-}
+#app { display: flex; flex-direction: column; height: 100vh; }
 
-#lumi-header { 
-    flex: 0 0 auto; 
-    text-align: center; 
-    padding: 20px 0; 
-}
-
-#lumi-focus { 
-    width: 70px; height: 70px; 
-    border-radius: 50%; 
-    margin: 0 auto 10px; 
-    transition: 0.4s; 
-}
-
+#lumi-header { flex: 0 0 auto; text-align: center; padding: 20px 0; }
+#lumi-focus { width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 10px; transition: 0.4s; }
 .lumi-idle { background: var(--lumi-blue); box-shadow: 0 0 20px var(--lumi-blue); }
 .lumi-proc { background: #fff; animation: pulsar 1s infinite; }
-.lumi-captando { background: var(--lumi-purple); box-shadow: 0 0 20px var(--lumi-purple); }
 
-#lumi-status { font-size: 0.8rem; color: var(--lumi-blue); letter-spacing: 2px; }
+#chat-container { flex: 1; overflow-y: auto; padding: 10px 20px; display: flex; flex-direction: column; }
+#messages-wrapper { display: flex; flex-direction: column; gap: 12px; }
 
-#chat-container { 
-    flex: 1; 
-    overflow-y: auto; 
-    padding: 10px 20px; 
-    display: flex; 
-    flex-direction: column; 
-}
+.bubble { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.4; animation: fadeIn 0.3s ease; }
+.msg-user { align-self: flex-end; background: rgba(255, 255, 255, 0.1); border-bottom-right-radius: 4px; }
+.msg-lumi { align-self: flex-start; background: rgba(0, 229, 255, 0.1); border-bottom-left-radius: 4px; border: 1px solid var(--lumi-blue); }
+.msg-lumi strong { color: var(--lumi-blue); font-size: 0.7rem; }
 
-#messages-wrapper { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 12px; 
-}
-
-.bubble { 
-    max-width: 80%; 
-    padding: 12px 16px; 
-    border-radius: 18px; 
-    font-size: 0.95rem; 
-    line-height: 1.4; 
-    animation: fadeIn 0.3s ease; 
-}
-
-.msg-user { 
-    align-self: flex-end; 
-    background: rgba(255, 255, 255, 0.1); 
-    border-bottom-right-radius: 4px; 
-}
-
-.msg-lumi { 
-    align-self: flex-start; 
-    background: rgba(0, 229, 255, 0.1); 
-    border-bottom-left-radius: 4px; 
-    border: 1px solid var(--lumi-blue); 
-}
-
-.input-area { 
-    flex: 0 0 auto; 
-    background: rgba(0, 0, 0, 0.4); 
-    backdrop-filter: blur(10px); 
-    padding: 15px; 
-    display: flex; 
-    gap: 10px; 
-    border-top: 1px solid rgba(255, 255, 255, 0.1); 
-}
-
-#user-input { 
-    flex: 1; 
-    background: rgba(255, 255, 255, 0.05); 
-    border: 1px solid rgba(255, 255, 255, 0.1); 
-    padding: 12px 18px; 
-    border-radius: 25px; 
-    color: white; 
-    outline: none; 
-}
-
-button { 
-    background: none; 
-    border: none; 
-    cursor: pointer; 
-    font-size: 1.4rem; 
-    color: white; 
-}
+.input-area { flex: 0 0 auto; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); padding: 15px; display: flex; gap: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+#user-input { flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 18px; border-radius: 25px; color: white; outline: none; }
+button { background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white; }
 
 @keyframes pulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); opacity: 0.8; } }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }

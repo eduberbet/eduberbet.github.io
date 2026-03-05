@@ -1,39 +1,31 @@
-/**
- * LUMI BRAIN - ROCKET EDITION 🧠🚀
- */
-
 const LUMI_BRAIN = {
     dadosOrigem: "https://raw.githubusercontent.com/eduberbet/Lumi/main/ReadMe.md",
     documentacao: "",
     
-    // Inicializa a conexão com o repositório do Eduardo
     async inicializar() {
         try {
             const resp = await fetch(this.dadosOrigem);
             if (resp.ok) {
                 this.documentacao = await resp.text();
-                console.log("🚀 Rocket Brain: Conectada ao repositório Core!");
+                console.log("🚀 Rocket Brain: Conectada exclusivamente ao projeto LUMI.");
             }
         } catch (e) {
-            console.warn("🚀 Rocket Brain: Operando em modo offline.");
+            console.warn("🚀 Rocket Brain: Offline.");
         }
     },
 
-    // Função de processamento principal
     enviar(mensagem, historico, callback) {
-        console.log("Rocket Brain: Processando...");
-        
-        // Simula o tempo de "pensamento"
         setTimeout(() => {
-            let resposta = "Minha antena oscilou! 🚀 Não achei isso na documentação oficial. Que tal me perguntar sobre o Roadmap ou pedir uma piada?";
+            let resposta = "Recebi sua mensagem! 🚀 Não encontrei esse termo específico na documentação da LUMI, mas posso te contar sobre o propósito do projeto!";
             
-            // Se o usuário perguntar algo que não foi pego pelo Regex do script.js
-            // O cérebro responde aqui.
-            
+            const rawMsg = mensagem.toLowerCase();
+            if (this.documentacao && rawMsg.length > 3) {
+                if (this.documentacao.toLowerCase().includes(rawMsg)) {
+                    resposta = "Isso faz parte do ecossistema LUMI! 📚 Estamos focados em criar ferramentas inteligentes para professores e alunos.";
+                }
+            }
             callback({ corpo_da_dica: resposta });
-        }, 1000);
+        }, 800);
     }
 };
-
-// Dispara a carga da documentação
 LUMI_BRAIN.inicializar();
