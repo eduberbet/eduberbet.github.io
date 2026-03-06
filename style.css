@@ -1,34 +1,37 @@
 :root {
     --lumi-blue: #00e5ff;
-    --lumi-purple: #b388ff;
+    --lumi-turquesa: #00ced1;
     --lumi-bg: #0a0a0c;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-
-body {
-    background: radial-gradient(circle at top, #1a2a3a 0%, var(--lumi-bg) 100%);
-    color: white; height: 100vh; overflow: hidden;
-}
-
+body { background: radial-gradient(circle at top, #1a2a3a 0%, var(--lumi-bg) 100%); color: white; height: 100vh; overflow: hidden; }
 #app { display: flex; flex-direction: column; height: 100vh; }
-
-#lumi-header { flex: 0 0 auto; text-align: center; padding: 20px 0; }
+#lumi-header { text-align: center; padding: 20px 0; }
 #lumi-focus { width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 10px; transition: 0.4s; }
-.lumi-idle { background: var(--lumi-blue); box-shadow: 0 0 20px var(--lumi-blue); }
+
+/* ESTADOS DO FOCO */
+.lumi-off { background: #333; box-shadow: inset 0 0 10px #000; }
+.lumi-idle { background: var(--lumi-blue); box-shadow: 0 0 25px var(--lumi-blue); }
 .lumi-proc { background: #fff; animation: pulsar 1s infinite; }
+
+@keyframes pulsar { 
+    0% { transform: scale(1); box-shadow: 0 0 0px #fff; }
+    50% { transform: scale(1.05); box-shadow: 0 0 30px #fff; }
+    100% { transform: scale(1); box-shadow: 0 0 0px #fff; }
+}
 
 #chat-container { flex: 1; overflow-y: auto; padding: 10px 20px; display: flex; flex-direction: column; }
 #messages-wrapper { display: flex; flex-direction: column; gap: 12px; }
-
-.bubble { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.4; animation: fadeIn 0.3s ease; }
+.bubble { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; animation: fadeIn 0.3s ease; }
 .msg-user { align-self: flex-end; background: rgba(255, 255, 255, 0.1); border-bottom-right-radius: 4px; }
-.msg-lumi { align-self: flex-start; background: rgba(0, 229, 255, 0.1); border-bottom-left-radius: 4px; border: 1px solid var(--lumi-blue); }
-.msg-lumi strong { color: var(--lumi-blue); font-size: 0.7rem; }
+.msg-lumi { align-self: flex-start; background: rgba(0, 229, 255, 0.08); border: 1px solid var(--lumi-blue); border-bottom-left-radius: 4px; }
+.msg-lumi strong { color: var(--lumi-blue); font-size: 0.7rem; text-transform: uppercase; }
 
-.input-area { flex: 0 0 auto; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); padding: 15px; display: flex; gap: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
-#user-input { flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 18px; border-radius: 25px; color: white; outline: none; }
-button { background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white; }
+.input-area { background: rgba(0,0,0,0.4); padding: 20px; display: flex; flex-direction: column; gap: 15px; border-top: 1px solid rgba(255,255,255,0.05); }
+#user-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); padding: 15px; border-radius: 12px; color: white; width: 100%; outline: none; }
+#user-input:focus { border-color: var(--lumi-blue); }
 
-@keyframes pulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); opacity: 0.8; } }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.botoes-acao { display: flex; gap: 10px; justify-content: center; }
+button { background: none; border: 1px solid var(--lumi-blue); color: var(--lumi-blue); padding: 8px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+button:hover { background: var(--lumi-blue); color: black; }

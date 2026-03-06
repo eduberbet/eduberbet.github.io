@@ -1,97 +1,150 @@
 /**
- * LUMI BRAIN 2.0 🧠 - O Fatiador de Markdown
- * Desenvolvido para: LUMI Rocket (QA Canaveral)
+ * LUMI BRAIN ROCKET 🧠 v2.1 - O MAESTRO DOS BITS
+ * Arquitetura: Indexação por Ponteiros e Composição de Resposta
+ * Autor: Eduardo Berbet (eduberbet) & LUMI AI
  */
 
 const LUMI_BRAIN = {
-    memoria: {},
-    fontes: [
-        'https://raw.githubusercontent.com/eduberbet/Lumi/main/ReadMe.md',
-        // 'https://raw.githubusercontent.com/eduberbet/Lumi/main/docs/visao_geral.md' // Exemplo de docs extras
-    ],
-
-    // Mapa de Sinônimos: Aponta palavras-chave para o Título da Seção no MD
-    mapaSinonimos: {
-        "tecnologias": ["stack", "linguagem", "feito com", "js", "html", "css", "tecnologia"],
-        "instalacao": ["como usar", "rodar", "baixar", "instalar", "configurar", "setup"],
-        "arquitetura": ["como funciona", "estrutura", "cerebro", "pinky", "core", "funcionamento"],
-        "objetivo": ["proposito", "missao", "porque", "sobre", "projeto"]
-    },
+    index: new Map(),
+    dicionario: new Map(),
+    fontes: ['./LRPS.md'],
+    isReady: false,
 
     async init() {
-        console.log("🧠 Cérebro: Iniciando ingestão de dados...");
-        for (const url of this.fontes) {
-            try {
-                const response = await fetch(url);
-                const text = await response.text();
-                this.fatiarMarkdown(text);
-            } catch (e) {
-                console.error("❌ Erro ao carregar fonte:", url);
-            }
+        try {
+            const response = await fetch(this.fontes[0]);
+            if (!response.ok) throw new Error("Não foi possível carregar o LRPS.md");
+            const text = await response.text();
+            this.preCompilar(text);
+            this.isReady = true;
+            console.log("🚀 Cérebro v2.1: Sistema de IDs e Dicionário em órbita.");
+        } catch (e) { 
+            console.error("❌ Falha na ignição do Cérebro:", e); 
         }
     },
 
-    fatiarMarkdown(texto) {
-        // Divide o MD em seções baseadas no título de segundo nível "## "
-        const secoes = texto.split(/^##\s+/m);
-        
+    /**
+     * PRÉ-COMPILAÇÃO: Mapeia o Markdown para acesso instantâneo em memória.
+     */
+    preCompilar(texto) {
+        const secoes = texto.split(/\n##\s+/);
         secoes.forEach(secao => {
             const linhas = secao.split('\n');
-            const titulo = linhas[0].toLowerCase().trim();
-            const conteudo = linhas.slice(1).join('\n').trim();
-            
-            if (titulo && conteudo) {
-                this.memoria[titulo] = conteudo;
+            const cabecalho = linhas[0].trim();
+
+            // 1. MAPEIA O ÍNDICE (Busca Rápida)
+            if (cabecalho.includes("[INDEX]")) {
+                linhas.slice(1).forEach(linha => {
+                    const match = linha.match(/(\d+):\s*(.*)/);
+                    if (match) {
+                        const id = match[1];
+                        const termos = match[2].toLowerCase().split('|').map(t => t.trim());
+                        this.index.set(id, termos);
+                    }
+                });
+            } 
+            // 2. MAPEIA O DICIONÁRIO (Conteúdo e Ações)
+            else {
+                const idMatch = cabecalho.match(/\[(\d+)\]/);
+                if (idMatch) {
+                    const id = idMatch[1];
+                    const meta = {};
+                    linhas.slice(1).forEach(l => {
+                        if (l.startsWith("Título:")) meta.titulo = l.replace("Título:", "").trim();
+                        if (l.startsWith("Explicação:")) meta.corpo = l.replace("Explicação:", "").trim();
+                        if (l.startsWith("Ação:")) meta.corpo = l.replace("Ação:", "").trim();
+                        if (l.startsWith("Social:")) meta.corpo = l.replace("Social:", "").trim();
+                    });
+                    this.dicionario.set(id, meta);
+                }
             }
         });
     },
 
-    limparMarkdown(texto) {
-        return texto
-            .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove links mantendo o texto: [texto](url) -> texto
-            .replace(/[*_~`]/g, '')                   // Remove formatação: **, _, ~~, `
-            .replace(/!\[.*\]\(.*\)/g, '')             // Remove imagens
-            .replace(/\n{2,}/g, '\n')                  // Remove quebras de linha excessivas
-            .trim();
+    /**
+     * PROCESSAMENTO: Identifica as intenções do usuário por Scoring.
+     */
+    async processarRequisicao(pergunta, contexto, callback) {
+        if (!this.isReady) {
+            setTimeout(() => this.processarRequisicao(pergunta, contexto, callback), 200);
+            return;
+        }
+
+        const raw = pergunta.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        let idsAtivados = [];
+
+        // Identifica quais IDs do INDEX aparecem na pergunta
+        this.index.forEach((termos, id) => {
+            if (termos.some(t => raw.includes(t))) {
+                idsAtivados.push(id);
+            }
+        });
+
+        // Orquestra a resposta final
+        const respostaFinal = this.comporResposta(idsAtivados, contexto, raw);
+        callback({ texto: respostaFinal, tipo: 'rocket_response' });
     },
 
-    async enviar(pergunta, historico, callback) {
-        const raw = pergunta.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        let respostaEncontrada = null;
+    /**
+     * COMPOSIÇÃO: Une conceitos, ações e variações aleatórias.
+     */
+    comporResposta(ids, contexto, raw) {
+        // Função interna para sortear variações separadas por '|'
+        const sortear = (texto) => {
+            if (!texto) return "";
+            const variantes = texto.split('|');
+            return variantes[Math.floor(Math.random() * variantes.length)].trim();
+        };
 
-        // 1. Busca via Mapa de Sinônimos
-        for (const [secao, palavras] of Object.entries(this.mapaSinonimos)) {
-            if (palavras.some(p => raw.includes(p))) {
-                if (this.memoria[secao]) {
-                    respostaEncontrada = this.memoria[secao];
-                    break;
-                }
-            }
+        // Separação por Categoria (Ação/Social vs Conceito Técnico)
+        const acoes = ids.filter(id => parseInt(id) >= 900);
+        const conceitos = ids.filter(id => parseInt(id) < 900);
+
+        // REGRA 1: Fallback (Nada encontrado)
+        if (ids.length === 0) {
+            const fallback = this.dicionario.get('999');
+            return sortear(fallback ? fallback.corpo : "Hum, não entendi. Pode repetir?");
         }
 
-        // 2. Busca direta por título (caso não tenha no mapa)
-        if (!respostaEncontrada) {
-            for (const titulo in this.memoria) {
-                if (raw.includes(titulo)) {
-                    respostaEncontrada = this.memoria[titulo];
-                    break;
-                }
-            }
-        }
-
-        // 3. Resposta Final
-        if (respostaEncontrada) {
-            const textoLimpo = this.limparMarkdown(respostaEncontrada);
-            // Retorna apenas os primeiros 300 caracteres para não sobrecarregar a voz (opcional)
-            const resumo = textoLimpo.length > 400 ? textoLimpo.substring(0, 397) + "..." : textoLimpo;
+        // REGRA 2: Ação + Conceito (Ex: Piada de PWA)
+        if (acoes.length > 0 && conceitos.length > 0) {
+            const acaoData = this.dicionario.get(acoes[0]);
+            const conceitoData = this.dicionario.get(conceitos[0]);
             
-            callback({ corpo_da_dica: resumo });
-        } else {
-            // Se o cérebro falhar, ele pede um Fallback pro Database (via script.js)
-            callback({ corpo_da_dica: LUMI_DB.getResposta('fallbacks') });
+            let base = sortear(acaoData.corpo);
+            const nomeConceito = conceitoData.titulo || this.index.get(conceitos[0])[0];
+            return base.replace(/{CONCEITO}/g, nomeConceito);
         }
+
+        // REGRA 3: Apenas Ação/Social (Ex: "Oi", "Tudo bem")
+        if (acoes.length > 0 && conceitos.length === 0) {
+            const socialData = this.dicionario.get(acoes[0]);
+            return sortear(socialData.corpo).replace("{NOME}", contexto.nome || "amigo");
+        }
+
+        // REGRA 4: Apenas Conceitos (Ex: "O que é PWA e WebSockets?")
+        if (conceitos.length > 0) {
+            let prefixos = [
+                "Sintonizei aqui: ",
+                "A Rocket buscou no cofre: ",
+                "Olha o que descobri: "
+            ];
+            let resumo = prefixos[Math.floor(Math.random() * prefixos.length)];
+
+            conceitos.forEach((id, idx) => {
+                const data = this.dicionario.get(id);
+                if (data) {
+                    const sep = idx === 0 ? "" : (idx === conceitos.length - 1 ? " e além disso, " : ", ");
+                    resumo += sep + sortear(data.corpo);
+                }
+            });
+
+            return resumo + ". Bem legal, né? 🚀";
+        }
+
+        return "Erro no processamento da Rocket. Verifique o LRPS.";
     }
 };
 
-// Auto-inicia o carregamento ao carregar o script
+// Inicialização automática
 LUMI_BRAIN.init();
