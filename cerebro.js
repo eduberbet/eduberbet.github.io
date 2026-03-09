@@ -1,150 +1,141 @@
 /**
- * LUMI BRAIN ROCKET 🧠 v2.1 - O MAESTRO DOS BITS
- * Arquitetura: Indexação por Ponteiros e Composição de Resposta
- * Autor: Eduardo Berbet (eduberbet) & LUMI AI
+ * LUMI ROCKET - CÉREBRO v4.0 (Beta Stabilizer)
+ * Correções: Buffer Acumulativo, Prioridade Social e Reset de Contexto
  */
 
 const LUMI_BRAIN = {
-    index: new Map(),
+    tree: {}, 
     dicionario: new Map(),
-    fontes: ['./LRPS.md'],
+    fonte: './LRPS.md',
     isReady: false,
+    
+    memoria: {
+        ultimoID: null,
+        explicados: new Set()
+    },
 
     async init() {
         try {
-            const response = await fetch(this.fontes[0]);
-            if (!response.ok) throw new Error("Não foi possível carregar o LRPS.md");
-            const text = await response.text();
-            this.preCompilar(text);
+            const res = await fetch(this.fonte);
+            const text = await res.text();
+            this.construirArvore(text);
             this.isReady = true;
-            console.log("🚀 Cérebro v2.1: Sistema de IDs e Dicionário em órbita.");
-        } catch (e) { 
-            console.error("❌ Falha na ignição do Cérebro:", e); 
-        }
+            console.log("🚀 Cérebro v4.0: Estabilizadores Online");
+        } catch (e) { console.error("❌ Erro na ignição:", e); }
     },
 
-    /**
-     * PRÉ-COMPILAÇÃO: Mapeia o Markdown para acesso instantâneo em memória.
-     */
-    preCompilar(texto) {
+    construirArvore(texto) {
         const secoes = texto.split(/\n##\s+/);
         secoes.forEach(secao => {
             const linhas = secao.split('\n');
             const cabecalho = linhas[0].trim();
+            const idMatch = cabecalho.match(/\[(\d+)\]/);
 
-            // 1. MAPEIA O ÍNDICE (Busca Rápida)
             if (cabecalho.includes("[INDEX]")) {
                 linhas.slice(1).forEach(linha => {
                     const match = linha.match(/(\d+):\s*(.*)/);
                     if (match) {
                         const id = match[1];
-                        const termos = match[2].toLowerCase().split('|').map(t => t.trim());
-                        this.index.set(id, termos);
+                        const aliases = match[2].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split('|').map(a => a.trim());
+                        aliases.forEach(alias => {
+                            let node = this.tree;
+                            alias.split(/\s+/).forEach((palavra, index, arr) => {
+                                if (!node[palavra]) node[palavra] = { _ids: [] };
+                                node = node[palavra];
+                                if (index === arr.length - 1) node._ids.push(id);
+                            });
+                        });
                     }
                 });
-            } 
-            // 2. MAPEIA O DICIONÁRIO (Conteúdo e Ações)
-            else {
-                const idMatch = cabecalho.match(/\[(\d+)\]/);
-                if (idMatch) {
-                    const id = idMatch[1];
-                    const meta = {};
-                    linhas.slice(1).forEach(l => {
-                        if (l.startsWith("Título:")) meta.titulo = l.replace("Título:", "").trim();
-                        if (l.startsWith("Explicação:")) meta.corpo = l.replace("Explicação:", "").trim();
-                        if (l.startsWith("Ação:")) meta.corpo = l.replace("Ação:", "").trim();
-                        if (l.startsWith("Social:")) meta.corpo = l.replace("Social:", "").trim();
-                    });
-                    this.dicionario.set(id, meta);
-                }
+            } else if (idMatch) {
+                const id = idMatch[1];
+                const meta = { corpo: "", titulo: "" };
+                linhas.slice(1).forEach(l => {
+                    if (l.startsWith("Título:")) meta.titulo = l.replace("Título:", "").trim();
+                    else if (l.includes("Corpo:")) meta.corpo = l.split('Corpo:')[1].trim();
+                });
+                this.dicionario.set(id, meta);
             }
         });
     },
 
-    /**
-     * PROCESSAMENTO: Identifica as intenções do usuário por Scoring.
-     */
-    async processarRequisicao(pergunta, contexto, callback) {
-        if (!this.isReady) {
-            setTimeout(() => this.processarRequisicao(pergunta, contexto, callback), 200);
-            return;
+    processarRequisicao(pergunta, contexto, callback) {
+        if (!this.isReady) return;
+        const input = pergunta.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const tokens = input.split(/\s+/).filter(t => t.length > 0);
+        let encontrados = new Set();
+
+        for (let i = 0; i < tokens.length; i++) {
+            let node = this.tree;
+            for (let j = i; j < tokens.length; j++) {
+                if (node[tokens[j]]) {
+                    node = node[tokens[j]];
+                    if (node._ids.length > 0) node._ids.forEach(id => encontrados.add(id));
+                } else break;
+            }
         }
 
-        const raw = pergunta.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        let idsAtivados = [];
-
-        // Identifica quais IDs do INDEX aparecem na pergunta
-        this.index.forEach((termos, id) => {
-            if (termos.some(t => raw.includes(t))) {
-                idsAtivados.push(id);
-            }
-        });
-
-        // Orquestra a resposta final
-        const respostaFinal = this.comporResposta(idsAtivados, contexto, raw);
-        callback({ texto: respostaFinal, tipo: 'rocket_response' });
+        const resposta = this.compor(Array.from(encontrados), contexto, input);
+        callback({ texto: resposta });
     },
 
-    /**
-     * COMPOSIÇÃO: Une conceitos, ações e variações aleatórias.
-     */
-    comporResposta(ids, contexto, raw) {
-        // Função interna para sortear variações separadas por '|'
-        const sortear = (texto) => {
-            if (!texto) return "";
-            const variantes = texto.split('|');
+    compor(ids, contexto, raw) {
+        let buffer = [];
+        let acoes = ids.filter(id => parseInt(id) >= 900);
+        let conceitos = ids.filter(id => parseInt(id) < 900);
+
+        // --- REGRA 1: PRIORIDADE SOCIAL ---
+        // Se der match em Saudações (950) ou Social (910), limpamos a memória técnica
+        if (acoes.some(id => id === '950' || id === '910')) {
+            this.memoria.ultimoID = null;
+            this.memoria.explicados.clear();
+        }
+
+        // --- REGRA 2: ESPECIFICIDADE ---
+        if ((conceitos.includes('102') || conceitos.includes('103')) && conceitos.includes('101')) {
+            conceitos = conceitos.filter(id => id !== '101');
+        }
+
+        // --- REGRA 3: RECUPERAÇÃO DE CONTEXTO ---
+        if (conceitos.length === 0 && acoes.length > 0 && this.memoria.ultimoID) {
+            conceitos = [this.memoria.ultimoID];
+        }
+
+        const sortear = (id) => {
+            const variantes = this.dicionario.get(id)?.corpo.split('|') || ["..."];
             return variantes[Math.floor(Math.random() * variantes.length)].trim();
         };
 
-        // Separação por Categoria (Ação/Social vs Conceito Técnico)
-        const acoes = ids.filter(id => parseInt(id) >= 900);
-        const conceitos = ids.filter(id => parseInt(id) < 900);
+        const querHumor = acoes.some(a => ['900', '905', '906'].includes(a)) || raw.includes("piada");
 
-        // REGRA 1: Fallback (Nada encontrado)
-        if (ids.length === 0) {
-            const fallback = this.dicionario.get('999');
-            return sortear(fallback ? fallback.corpo : "Hum, não entendi. Pode repetir?");
-        }
-
-        // REGRA 2: Ação + Conceito (Ex: Piada de PWA)
-        if (acoes.length > 0 && conceitos.length > 0) {
-            const acaoData = this.dicionario.get(acoes[0]);
-            const conceitoData = this.dicionario.get(conceitos[0]);
-            
-            let base = sortear(acaoData.corpo);
-            const nomeConceito = conceitoData.titulo || this.index.get(conceitos[0])[0];
-            return base.replace(/{CONCEITO}/g, nomeConceito);
-        }
-
-        // REGRA 3: Apenas Ação/Social (Ex: "Oi", "Tudo bem")
-        if (acoes.length > 0 && conceitos.length === 0) {
-            const socialData = this.dicionario.get(acoes[0]);
-            return sortear(socialData.corpo).replace("{NOME}", contexto.nome || "amigo");
-        }
-
-        // REGRA 4: Apenas Conceitos (Ex: "O que é PWA e WebSockets?")
+        // --- COMPOSIÇÃO DE RESPOSTA ---
         if (conceitos.length > 0) {
-            let prefixos = [
-                "Sintonizei aqui: ",
-                "A Rocket buscou no cofre: ",
-                "Olha o que descobri: "
-            ];
-            let resumo = prefixos[Math.floor(Math.random() * prefixos.length)];
-
-            conceitos.forEach((id, idx) => {
-                const data = this.dicionario.get(id);
-                if (data) {
-                    const sep = idx === 0 ? "" : (idx === conceitos.length - 1 ? " e além disso, " : ", ");
-                    resumo += sep + sortear(data.corpo);
-                }
-            });
-
-            return resumo + ". Bem legal, né? 🚀";
+            let textosConceitos = conceitos.map(id => {
+                this.memoria.ultimoID = id;
+                return this.dicionario.get(id)?.corpo.split('|')[0] || "";
+            }).filter(t => t !== "");
+            
+            if (textosConceitos.length > 0 && !querHumor) {
+                buffer.push(`Sintonizei: ${textosConceitos.join(" + ")}. 🚀`);
+            }
         }
 
-        return "Erro no processamento da Rocket. Verifique o LRPS.";
+        if (querHumor) {
+            const idT = conceitos[0] || this.memoria.ultimoID;
+            if (idT && !raw.includes("comum")) {
+                const nomeT = this.dicionario.get(idT).titulo;
+                buffer.push(sortear('900').replace(/{CONCEITO}/g, nomeT));
+            } else {
+                buffer.push(sortear(acoes.includes('906') ? '906' : '905'));
+            }
+        }
+
+        if (acoes.includes('910')) buffer.push(sortear('910').replace(/{NOME}/g, contexto.userName));
+        if (acoes.includes('950')) buffer.push(sortear('950').replace(/{NOME}/g, contexto.userName));
+
+        let respostaFinal = buffer.join(" .. ");
+        return respostaFinal || sortear('999').replace("{NOME}", contexto.userName);
     }
 };
 
-// Inicialização automática
 LUMI_BRAIN.init();

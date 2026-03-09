@@ -1,44 +1,50 @@
-# LUMI - Lanterna Universal de Mediação Inteligente 💡
+# LUMI Rocket - A Interface de Alta Performance 🚀
 
-**Conceito:** A Inteligência Artificial como uma lanterna para o raciocínio.
+**Conceito:** A face visível e veloz do ecossistema LUMI.
 
-A **LUMI** é um ecossistema de apoio ao professor desenvolvido para rodar 100% offline. Ela não entrega respostas; ela media o raciocínio socrático utilizando materiais didáticos (PDFs e Post-its) fornecidos pelo docente.
-
----
-
-## 🎒 LUMI Pocket: A Versão Embaixadora
-
-Este repositório contém a **LUMI Pocket**, uma versão *standalone* e de alta disponibilidade do ecossistema. Enquanto o projeto principal é otimizado para infraestrutura escolar local, a Pocket serve como o ponto de contato oficial com o mundo.
-
-### 🌐 Onde encontrar:
-* **Repositório Original (Core):** [github.com/eduberbet/Lumi](https://github.com/eduberbet/Lumi)
-* **Versão Live (Pocket):** [eduberbet.github.io](https://eduberbet.github.io)
+A **LUMI Rocket** é a implementação front-end definitiva do ecossistema LUMI, projetada para ser a ponte entre o utilizador e o processamento lógico. Diferente de interfaces estáticas, a Rocket utiliza o motor `cerebro.js` para navegar numa estrutura de dados viva (LRPS), proporcionando uma experiência de resposta instantânea, resiliente e humanizada.
 
 ---
 
-## ⚖️ Pocket vs. Core: Qual a diferença?
+## 🏗️ Arquitetura e Componentes
 
-Embora compartilhem o mesmo "Pinky" (Interface e UX), a **LUMI Pocket** e a **LUMI Prime** (versão de sala de aula) possuem propósitos distintos:
+A Rocket opera sob o princípio de **Soberania do Front-end**, permitindo que a inteligência de busca e a interface funcionem de forma síncrona:
 
-| Recurso | LUMI Core | LUMI Pocket (Esta Versão) |
+* **Cérebro v4.0 (Stabilizer):** Motor de busca baseado em árvore de prefixos (Trie) que processa intenções, conceitos técnicos e interações sociais com priorização inteligente.
+* **LRPS (Lumi Response Protocol System):** O protocolo de dados em Markdown que serve como a "memória de longo prazo" da Rocket.
+* **Pinky Interface:** Sistema de UI focado em UX, com feedback visual de estado (Sintonizando, Em Sintonia, Processando) e suporte nativo a comandos de voz.
+
+---
+
+## ⚖️ Rocket vs. Prime: O Ecossistema
+
+| Recurso | LUMI Prime (Core) | LUMI Rocket |
 | :--- | :--- | :--- |
-| **Ambiente** | Redes locais escolares (Offline) | Web / GitHub Pages (Online) |
-| **Cérebro** | Backend Python + LLM Local | `cerebro.js` (Simulador de Borda) |
-| **Foco Pedagógico** | Mediação Socrática (Desafia o aluno) | Documentação Viva (Explica o projeto) |
-| **Base de Dados** | PDFs e Materiais do Professor | Documentação e Roadmap do Projeto |
-| **Propósito** | Uso em sala de aula real | Demonstração e Showcase Técnico |
+| **Ambiente** | Redes locais escolares (Offline) | Web / PWA de Alta Disponibilidade |
+| **Cérebro** | Backend Python + LLM Local | `cerebro.js` (Processamento de Borda) |
+| **Foco** | Mediação Socrática em Sala | Documentação Interativa e Suporte Técnico |
+| **Interação** | Baseada em Materiais do Professor | Baseada na Árvore de Decisão do Projeto |
 
 ---
 
-## 🧠 Documentação Viva
-A **LUMI Pocket** não é apenas um site estático. Ela foi projetada para interagir utilizando sua própria documentação como banco de dados. Em breve, ela será capaz de explicar em tempo real:
-* O que ela é e como funciona sua arquitetura.
-* O estágio atual do Roadmap de desenvolvimento.
-* Quais tecnologias (PWA, WebSocket, Voice Recognition) a sustentam.
+## 🧠 Recursos da Versão 4.0
+
+A versão **v4.0 Stabilizer** trouxe avanços críticos para a robustez do sistema:
+* **Buffer Acumulativo:** Capacidade de processar múltiplos conceitos técnicos numa única entrada sem perda de dados (ex: HTML + CSS + JS).
+* **Prioridade de Intenção:** Reconhecimento imediato de mudanças de contexto, limpando a memória técnica para interações sociais ou saudações.
+* **Resiliência Linguística:** Suporte a termos com erros de digitação (Fuzzy Match) através do mapeamento dinâmico no INDEX.
 
 ---
 
-## 📬 Contato e Suporte
-Dúvidas, sugestões de melhoria ou interesse em apoiar o projeto (doações e parcerias) Entre em contato: **edu.berbet@gmail.com** ou **edu.berbet@hotmail.com**
+## 🛠️ Roadmap de Decolagem
+- [x] Implementação da Árvore de Prefixos v3.7
+- [x] Estabilização de Contexto e Buffer v4.0
+- [ ] Integração de WebSockets para comunicação com o Prime
+- [ ] Expansão da base de conhecimentos socráticos
 
-*LUMI: Menos respostas prontas, mais mentes brilhantes.*
+---
+
+## 📬 Contacto e Suporte
+Desenvolvido por **Eduardo Berbet de Alcantara (eduberbet)**.
+
+*LUMI Rocket: Menos latência, mais inteligência.*
