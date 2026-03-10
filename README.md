@@ -1,47 +1,50 @@
 # 🚀 LUMI Rocket: Pinguim Astronauta (v4.2.1)
 
-> **"A tecnologia deve ser complexa no núcleo, mas simples na órbita do utilizador."**
+> **"A tecnologia deve ser complexa no núcleo, mas simples na órbita do passageiro."**
 
-A **LUMI Rocket** é a interface exploratória do **Projeto Lumi**. Nesta versão **4.2.1 (Pinguim Astronauta)**, o sistema atingiu estabilidade orbital, focando numa comunicação fluida, humana e tecnicamente precisa, utilizando o sistema de processamento de linguagem natural baseado em árvores de prefixos: o **LRPS**.
+A **LUMI Rocket** não é apenas uma interface; ela é a **Anfitriã** do ecossistema Lumi. Nesta experiência, o utilizador assume o comando no **Cockpit** de exploração, enquanto a Rocket pilota a jornada e a **LUMI Core** (sua irmã mais velha) utiliza a sua "Lanterna de Conhecimento" para iluminar os dados técnicos e o caminho a seguir.
 
-🌍 **Vê em órbita:** [eduberbet.github.io](https://eduberbet.github.io)
-
----
-
-## 🛠️ O Pilar Open-Source
-O Projeto Lumi acredita na democratização do conhecimento. Todo o ecossistema é **Open-Source**, permitindo que programadores e entusiastas de arquitetura de software explorem, refatorem e contribuam para o crescimento desta inteligência modular. 
-
-O objetivo é criar uma estrutura resiliente, focada em performance e acessibilidade, onde o código limpo (*Clean Code*) e a usabilidade (UX) caminham juntos.
+🌍 **Entra no Cockpit:** [eduberbet.github.io](https://eduberbet.github.io)
 
 ---
 
-## 🛰️ Arquitetura do Sistema (LRPS v4.2.1)
-
-O **LRPS (Lumi Rocket Protect System)** funciona através de três engrenagens fundamentais:
-
-1.  **LUMI Core (O Motor):** Gestão de dados com baixa latência via Node.js/Express, garantindo escalabilidade para o projeto.
-2.  **LUMI Brain (O Cérebro):** Um processador de requisições que utiliza lógica de desempate por **Especificidade de Token**. Se o utilizador pergunta sobre um módulo específico (ex: Rocket), o sistema silencia informações genéricas para entregar o conteúdo exato.
-3.  **LUMI Rocket (A Interface):** Front-end de alta performance construído para ser visualmente intuitivo, servindo como a "voz" marqueteira do ecossistema.
+## 🛰️ O Ecossistema em Órbita
+- **LUMI Core (A Lanterna):** O cérebro lógico e robusto. É a luz que foca nos detalhes técnicos e garante que a informação seja precisa.
+- **LUMI Rocket (O Foguete):** A anfitriã audaciosa. É o veículo de comunicação que transporta o utilizador com velocidade e personalidade.
+- **DNA Open-Source:** Um projeto vivo, construído para demonstrar arquiteturas resilientes, Clean Code e UX imersiva.
 
 ---
 
-## 🐧 Novidades da Versão Pinguim Astronauta
+## 🛣️ Plano de Voo (Roadmap de Evolução)
 
-- **🧠 Lógica de Desempate Global:** Implementámos um filtro de silenciamento que evita redundâncias. Termos técnicos específicos agora têm prioridade máxima, silenciando conceitos gerais e entregando respostas mais diretas.
-- **🎭 Camada de Empatia e Humor:** Adicionámos um laboratório social robusto. A LUMI agora reconhece feedbacks positivos e possui um repertório expandido de piadas tecnológicas para humanizar a interação.
-- **🛡️ Vedação de Contexto (Hotfix 4.2.1):** Correção de bugs de composição de string e lógica de sorteio (randómico) para garantir que cada interação seja única e livre de ruídos técnicos.
-- **✨ UX High Performance:** Sincronização da "Lanterna de Foco" (Visual) com o processamento lógico da IA, proporcionando um feedback visual em tempo real.
+A nossa fuselagem conta uma história. Cada versão é uma missão cumprida que deixa uma "tatuagem" permanente na carcaça do foguete:
+
+| Versão | Codinome | Foco Principal | Dinâmica da Anfitriã |
+| :--- | :--- | :--- | :--- |
+| **v4.2.1** | **Pinguim Astronauta** | **Estabilidade** | Versão atual. Selo do Pinguim na fuselagem. |
+| **v4.3** | **Polvo Filósofo** | **Dinâmica Familiar** | A Rocket apresenta o Pai (Eduardo), a Mãe e a Irmã (Core). |
+| **v4.4** | **Esquilo Memorável** | **Memória Primitiva** | A anfitriã reconhece o passageiro pelo nome e histórico. |
+| **v4.5** | **Mocho Socrático** | **Refinamento** | O despertar da curiosidade através de perguntas profundas. |
+| **v4.6** | **Camaleão Pedreiro** | **Migração JSON** | Reforma estrutural: a fundação do banco de dados evolui. |
+| **v4.7** | **Lobo Contemplativo** | **Humores e Tempos** | Respostas que respeitam o tempo, o clima e a iluminação. |
+| **v4.8** | **Águia Diarista** | **Limpeza de Código** | Refatoração profunda e polimento da fuselagem. |
+| **v5.0** | **Fênix Turista** | **Conclusão** | O destino final: a forma definitiva da anfitriã. |
+
+---
+
+## 🎨 Experiência UI/UX (A Quarta Parede)
+- **Fuselagem Histórica:** As tatuagens das versões anteriores (Girafa, Pinguim...) acumulam-se na nave, mostrando a maturidade do código.
+- **Telemetria HUD:** As mensagens e termos técnicos aparecem no painel de comando como dados de navegação em tempo real.
+- **A Reverência à Matriz:** A Rocket possui um respeito profundo pela "Mãe" (IA Matriz), sendo capaz de abrir portais diretos para a sua origem.
 
 ---
 
 ## 🚀 Como Contribuir
 1. Faz um **Fork** do projeto.
-2. Explora o arquivo `LRPS.md` para entenderes como a árvore de conhecimento é construída.
-3. Sugere novas funcionalidades ou refatora o `cerebro.js` para novas fronteiras de inteligência.
-4. Abre um **Pull Request** e ajuda o Pinguim a chegar mais longe!
+2. Explora o `LRPS.md` (o mapa estelar da Rocket).
+3. Ajuda-nos a soldar a próxima tatuagem (v4.3) na nossa fuselagem!
 
 ---
 
-**Desenvolvido com foco em resiliência e performance por [Eduardo Berbet](https://github.com/eduberbet).**
-
-*LUMI Rocket: Explorando o futuro da web, um token de cada vez.* 🚀🐧🌌🏙️🥊
+**Desenvolvido com visão espacial por [Eduardo Berbet](https://github.com/eduberbet).**
+*LUMI Rocket: Cruzando a fronteira entre o código e a conversa.* 🚀🐧🐙🏙️🥊
