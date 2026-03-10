@@ -1,50 +1,47 @@
-# LUMI Rocket - A Interface de Alta Performance 🚀
+# 🚀 LUMI Rocket: Pinguim Astronauta (v4.2.1)
 
-**Conceito:** A face visível e veloz do ecossistema LUMI.
+> **"A tecnologia deve ser complexa no núcleo, mas simples na órbita do utilizador."**
 
-A **LUMI Rocket** é a implementação front-end definitiva do ecossistema LUMI, projetada para ser a ponte entre o utilizador e o processamento lógico. Diferente de interfaces estáticas, a Rocket utiliza o motor `cerebro.js` para navegar numa estrutura de dados viva (LRPS), proporcionando uma experiência de resposta instantânea, resiliente e humanizada.
+A **LUMI Rocket** é a interface exploratória do **Projeto Lumi**. Nesta versão **4.2.1 (Pinguim Astronauta)**, o sistema atingiu estabilidade orbital, focando numa comunicação fluida, humana e tecnicamente precisa, utilizando o sistema de processamento de linguagem natural baseado em árvores de prefixos: o **LRPS**.
 
----
-
-## 🏗️ Arquitetura e Componentes
-
-A Rocket opera sob o princípio de **Soberania do Front-end**, permitindo que a inteligência de busca e a interface funcionem de forma síncrona:
-
-* **Cérebro v4.0 (Stabilizer):** Motor de busca baseado em árvore de prefixos (Trie) que processa intenções, conceitos técnicos e interações sociais com priorização inteligente.
-* **LRPS (Lumi Response Protocol System):** O protocolo de dados em Markdown que serve como a "memória de longo prazo" da Rocket.
-* **Pinky Interface:** Sistema de UI focado em UX, com feedback visual de estado (Sintonizando, Em Sintonia, Processando) e suporte nativo a comandos de voz.
+🌍 **Vê em órbita:** [eduberbet.github.io](https://eduberbet.github.io)
 
 ---
 
-## ⚖️ Rocket vs. Prime: O Ecossistema
+## 🛠️ O Pilar Open-Source
+O Projeto Lumi acredita na democratização do conhecimento. Todo o ecossistema é **Open-Source**, permitindo que programadores e entusiastas de arquitetura de software explorem, refatorem e contribuam para o crescimento desta inteligência modular. 
 
-| Recurso | LUMI Prime (Core) | LUMI Rocket |
-| :--- | :--- | :--- |
-| **Ambiente** | Redes locais escolares (Offline) | Web / PWA de Alta Disponibilidade |
-| **Cérebro** | Backend Python + LLM Local | `cerebro.js` (Processamento de Borda) |
-| **Foco** | Mediação Socrática em Sala | Documentação Interativa e Suporte Técnico |
-| **Interação** | Baseada em Materiais do Professor | Baseada na Árvore de Decisão do Projeto |
+O objetivo é criar uma estrutura resiliente, focada em performance e acessibilidade, onde o código limpo (*Clean Code*) e a usabilidade (UX) caminham juntos.
 
 ---
 
-## 🧠 Recursos da Versão 4.0
+## 🛰️ Arquitetura do Sistema (LRPS v4.2.1)
 
-A versão **v4.0 Stabilizer** trouxe avanços críticos para a robustez do sistema:
-* **Buffer Acumulativo:** Capacidade de processar múltiplos conceitos técnicos numa única entrada sem perda de dados (ex: HTML + CSS + JS).
-* **Prioridade de Intenção:** Reconhecimento imediato de mudanças de contexto, limpando a memória técnica para interações sociais ou saudações.
-* **Resiliência Linguística:** Suporte a termos com erros de digitação (Fuzzy Match) através do mapeamento dinâmico no INDEX.
+O **LRPS (Lumi Rocket Protect System)** funciona através de três engrenagens fundamentais:
 
----
-
-## 🛠️ Roadmap de Decolagem
-- [x] Implementação da Árvore de Prefixos v3.7
-- [x] Estabilização de Contexto e Buffer v4.0
-- [ ] Integração de WebSockets para comunicação com o Prime
-- [ ] Expansão da base de conhecimentos socráticos
+1.  **LUMI Core (O Motor):** Gestão de dados com baixa latência via Node.js/Express, garantindo escalabilidade para o projeto.
+2.  **LUMI Brain (O Cérebro):** Um processador de requisições que utiliza lógica de desempate por **Especificidade de Token**. Se o utilizador pergunta sobre um módulo específico (ex: Rocket), o sistema silencia informações genéricas para entregar o conteúdo exato.
+3.  **LUMI Rocket (A Interface):** Front-end de alta performance construído para ser visualmente intuitivo, servindo como a "voz" marqueteira do ecossistema.
 
 ---
 
-## 📬 Contacto e Suporte
-Desenvolvido por **Eduardo Berbet de Alcantara (eduberbet)**.
+## 🐧 Novidades da Versão Pinguim Astronauta
 
-*LUMI Rocket: Menos latência, mais inteligência.*
+- **🧠 Lógica de Desempate Global:** Implementámos um filtro de silenciamento que evita redundâncias. Termos técnicos específicos agora têm prioridade máxima, silenciando conceitos gerais e entregando respostas mais diretas.
+- **🎭 Camada de Empatia e Humor:** Adicionámos um laboratório social robusto. A LUMI agora reconhece feedbacks positivos e possui um repertório expandido de piadas tecnológicas para humanizar a interação.
+- **🛡️ Vedação de Contexto (Hotfix 4.2.1):** Correção de bugs de composição de string e lógica de sorteio (randómico) para garantir que cada interação seja única e livre de ruídos técnicos.
+- **✨ UX High Performance:** Sincronização da "Lanterna de Foco" (Visual) com o processamento lógico da IA, proporcionando um feedback visual em tempo real.
+
+---
+
+## 🚀 Como Contribuir
+1. Faz um **Fork** do projeto.
+2. Explora o arquivo `LRPS.md` para entenderes como a árvore de conhecimento é construída.
+3. Sugere novas funcionalidades ou refatora o `cerebro.js` para novas fronteiras de inteligência.
+4. Abre um **Pull Request** e ajuda o Pinguim a chegar mais longe!
+
+---
+
+**Desenvolvido com foco em resiliência e performance por [Eduardo Berbet](https://github.com/eduberbet).**
+
+*LUMI Rocket: Explorando o futuro da web, um token de cada vez.* 🚀🐧🌌🏙️🥊
