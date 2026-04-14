@@ -2,67 +2,63 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUMI Rocket - Canaveral Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMI Rocket | Cockpit v4.3</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Estilos rápidos para os novos controles de velocidade */
-        .botoes-acao {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        #group-speed {
-            background: rgba(0, 206, 209, 0.1);
-            padding: 5px 15px;
-            border-radius: 20px;
-            border: 1px solid var(--lumi-turquesa);
-        }
-        .speed-label {
-            font-size: 0.7rem;
-            color: var(--lumi-turquesa);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div id="app">
-        <header id="lumi-header">
-            <div id="lumi-focus" class="lumi-off"></div>
-            <p id="lumi-status">Sintonizando...</p>
-        </header>
+<body class="mode-orbital"> <div id="cockpit-container">
         
-        <main id="chat-container">
-            <div id="messages-wrapper"></div>
+        <div id="deep-space">
+            <div id="star-samuel" class="interactive-lore" data-target="105"></div>
+            <div class="star-field"></div>
+        </div>
+
+        <main id="hud-glass">
+            <header id="hud-header">
+                <div class="telemetry">
+                    <span>SISTEMA: ROCKET v4.3</span>
+                    <span id="lumi-status">STATUS: EM ÓRBITA</span>
+                </div>
+                <div class="core-lantern" id="lantern-indicator"></div>
+            </header>
+
+            <section id="chat-output">
+                </section>
+
+            <footer id="hud-input-area">
+                <input type="text" id="user-input" placeholder="Comando de navegação..." autocomplete="off">
+                <button id="btn-ignition">IGNIÇÃO</button>
+            </footer>
         </main>
 
-        <footer class="input-area">
-            <input type="text" id="user-input" placeholder="Diz 'quem és tu'..." autocomplete="off">
-            
-            <div class="botoes-acao" id="group-normal">
-                <button id="stt-btn" title="Segure para falar">
-                    <span aria-hidden="true">🎙️</span>
-                </button>
-                <button id="send-btn" title="Enviar texto">
-                    <span aria-hidden="true">🚀</span>
-                </button>
+        <nav id="dashboard">
+            <div id="isaque-seal" class="interactive-lore" data-target="106">
+                Visual Art by Isaque Berbet
             </div>
 
-            <div class="botoes-acao" id="group-speed" style="display: none;">
-                <button id="slow-btn" title="Mais lento">
-                    <span aria-hidden="true">🐢</span>
-                </button>
-                <span class="speed-label">Voz</span>
-                <button id="fast-btn" title="Mais rápido">
-                    <span aria-hidden="true">⚡</span>
-                </button>
+            <div id="manche-control">
+                <label for="flight-stick">MODO DE VOO</label>
+                <div class="stick-wrapper">
+                    <input type="range" min="0" max="2" value="1" id="flight-stick" step="1">
+                    <div class="stick-labels">
+                        <span>SONDA</span>
+                        <span>ORBITAL</span>
+                        <span>HIPER</span>
+                    </div>
+                </div>
             </div>
-        </footer>
+
+            <div id="fuselage-badges">
+                <span class="badge mission-passed" title="v4.1 - Girafa Mergulhadora">🦒</span>
+                <span class="badge mission-passed" title="v4.2 - Pinguim Astronauta">🐧</span>
+                <span class="badge current-mission" title="v4.3 - Polvo Filósofo">🐙</span>
+            </div>
+        </nav>
+
     </div>
-    
-    <script src="script.js"></script> 
+
     <script src="cerebro.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
